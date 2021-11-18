@@ -1,4 +1,5 @@
 import UIKit
+import Foundation
 import Combine
 
 /*:
@@ -21,10 +22,10 @@ import Combine
 
  ```
  begin
-    var name = "Tom"
-    print(name)
-    name += " Harding"
-    print(name)
+ var name = "Tom"
+ print(name)
+ name += " Harding"
+ print(name)
  end
  ```
 
@@ -37,15 +38,15 @@ import Combine
  ```
  --- Thread 1 ---
  begin
-    var name = "Tom"
-    print(name)
+ var name = "Tom"
+ print(name)
 
  --- Thread 2 ---
-    name = "Billy Bob"
+ name = "Billy Bob"
 
  --- Thread 3 ---
-    name += "Harding"
-    print(name)
+ name += "Harding"
+ print(name)
  end
  ```
 
@@ -109,7 +110,7 @@ let img_publisher = UIImage(named: "Publisher_emit_example.png")
 
  이를 통해 단일의 구독에서 매우 복잡한 연산 로직들을 보다 수월하게 해결하며 가독성 또한 챙길수 있죠.
 
-*/
+ */
 
 
 let img_subscriber = UIImage(named: "Subscriber_example.png")
@@ -142,4 +143,20 @@ let img_subscriber = UIImage(named: "Subscriber_example.png")
 
  해당 객체를 해제하게 되면 해당 시퀀스에 대한 구독이 취소됩니다.
 
+ 이를 보다 더욱 편리하게 사용학 위해 `[AnyCancellable]` 타입의 콜렉션 프로퍼티를 소유하고 해당 프로퍼티 내에 모든 구독 모델들을 추가할수 있습니다.
+
+ 이를 release함으로써  해당 콜렉션 내에 들어가있는 `Cancellable` 프로토콜을 준수하는 객체들에 대한 구독을 해제하고 메모리를 해제할수 있습니다. (RxSwift의 `disposeBag` 과 동일한 기능을 제공하는 클래스입니다.
+
+
+ ## Key Points
+ ---
+
+ - `Combine`은 비동기 이벤트 처리를 선언형 & 반응형으로 풀어내도록 돕는 프레임워크입니다.
+ - 이는 기존의 비동기를 위해 사용되던 다양한 기술들을 통합하기 위해 고안되었으며 변하는 상태값을 다루며 에러 핸들링이 가능합니다.
+ - `Combine`의 핵심 3가지는 아래와 같습니다.
+    - Publisher(Observable): 이벤트를 방출합니다.
+    - Operator: Upstream으로 부터 전달되어 오는 이벤트를 비동기로 처리하고 조작합니다.
+    - Subscriber(Observer): publisher chain으로부터 시작되어 operator를 통해 연산되어 오는 시퀀스를 구독하여 이벤트를 받습니다.
+
  */
+
