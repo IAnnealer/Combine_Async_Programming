@@ -127,4 +127,19 @@ let img_subscriber = UIImage(named: "Subscriber_example.png")
  - sink: 수신한 Output 결과값과 Completion Closure를 제공 합니다. RxSwift의 `.subscribe` 와 동일합니다.
  - assign: 수신한 Output을 데이터 모델 혹은 UI에 즉각 bind 합니다. RxSwift의 `.bind` 와 동일합니다.
 
+ ## Subscription
+ ---
+
+ 이 문서에서는 Combine의 `subscription` 프로토콜과 이를 채택하는 객체들을 설명하기 위한 용어로 `subscription` 이라는 단어를 사용합니다.
+
+ `subscription`에 구독을 진행하게 되면 이는 `publisher` 체인을 활성화 합니다.
+
+ 즉, `publisher`는 결과값을 받는 구독자가 없다면 이벤트를 방출할수 없습니다.
+
+ 또한, 우리는 구독 행위에 대한 메모리 관리를 위해 `Cancellable` 이라는 프로토콜을 사용합니다.
+
+ `Cancellable` 프로토콜을 준수하는 구독자는 `Cancellable` 객체를 반환하게 됩니다.
+
+ 해당 객체를 해제하게 되면 해당 시퀀스에 대한 구독이 취소됩니다.
+
  */
