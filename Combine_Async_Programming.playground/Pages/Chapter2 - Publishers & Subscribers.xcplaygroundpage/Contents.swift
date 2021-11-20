@@ -154,3 +154,25 @@ example(of: "assing(to:on:)", action: {
  단 주어지는 값이 반드시 있어야하기 때문에 `sink` 와는 달리 publisher의 failure. 타입이 Never인 경우에만 사용이 가능합니다.
  */
 
+/*:
+ ## Hello Cancellable
+
+ Subscriber가 Publisher로 부터 더이상 이벤트를 받고 싶지 않거나 할 일이 끝났다면 구독을 취소해서 리소스를 해제해야합니다.
+
+ Subscription은 `AnyCancellable` 타입을 반환하게 되며 이는 `Cancellable` 이라는 프로토콜을 준수하고 `cancel()` 메소드를 수행할수 있게 설계되어 있습니다.
+
+ `cancel()` 을 호출하지 않을 경우, 구독이 계속하여 진행되므로 subscriber의 모든 일이 끝나면 cancel을 반드시 호출해주어야 합니다.
+ */
+
+/*:
+ ## Understanding what's going on
+ ---
+
+ ![publisher-subscriber-diagram](publisher-subscriber-diagram.png)
+
+ 1. subscriber가 publisher를 구독합니다.
+ 2. publisher가 subscription을 만들어서 subscriber에게 전달합니다.
+ 3. subscriber가 publisher에게 value를 요청합니다.
+ 4. publisehr가 value를 방출합니다.
+ 5. publisher의 업무가 끝나면 completion event를 전달합니다.
+ */
