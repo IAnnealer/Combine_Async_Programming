@@ -51,13 +51,16 @@ import Combine
  ```
 
  위 예시 또한 앞서 살펴봤던 예시와 같이 `name` 이라는 변수에 "Tom"이라는 문자열을 대입하고 그 이후에 "Harding" 이라는 문자열을 대입합니다.
+
  하지만 Thread1 과 Thread3 실행 사이에 Thread2가 동작하게 된다면 `name` 이라는 변수는 "Billy Bob" 으로 초기화됩니다.
 
  이 코드의 결과는 시스템 로드에 의존함으로 매 실행에 따라 서로 다른 결과를 보여주게 될 것 입니다.
 
  비동기 코드를 실행하면 앱에서 가변한 상태를 관리하는 작업이 됩니다.
 
+ */
 
+/*:
  ## Foundation and UIKit/AppKit
  ---
 
@@ -85,11 +88,7 @@ import Combine
 
  아래 예시는 Publisher가 어떻게 Int 타입의 값을 방출하는지를 시간의 흐름에 따라 시각화한 이미지입니다.
 
- */
-
-let img_publisher = UIImage(named: "Publisher_emit_example.png")
-
-/*:
+ ![Publisher_emit_example](Publisher_emit_example.png)
 
  시간에 흐름에 따라 순차적으로 특정 정수값들이 방출됩니다.
 
@@ -112,12 +111,11 @@ let img_publisher = UIImage(named: "Publisher_emit_example.png")
 
  */
 
-
-let img_subscriber = UIImage(named: "Subscriber_example.png")
-
 /*:
  ## Subscribers
  ---
+
+ ![Subscriber_example](Subscriber_example.png)
 
  모든 구독은 Subscriber를 통해 완성됩니다.
 
