@@ -3,5 +3,6 @@
     <pages>
         <page name='Chapter1 - Hello, Combine!'/>
         <page name='Chapter2 - Publishers &amp; Subscribers'/>
+        <page name='Chapter3 - Transforming Operators'/>
     </pages>
 </playground>
