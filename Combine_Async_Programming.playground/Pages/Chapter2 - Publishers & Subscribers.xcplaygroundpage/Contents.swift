@@ -176,3 +176,148 @@ example(of: "assing(to:on:)", action: {
  4. publisehr가 value를 방출합니다.
  5. publisher의 업무가 끝나면 completion event를 전달합니다.
  */
+
+/*:
+ ## Hello Subject
+---
+
+ subject또한 rxSwift에서의 subject와 유사합니다.
+
+ subject는 publisher의 일종이며 Publisher 프로토콜을 준수합니다.
+
+ ```
+ protoocl Subject: AnyObject, Publisher
+ ```
+
+ subject는 sink를 통해 구독도 가능하며 send를 통해 자체적으로 이벤트 방출 또한 가능합니다.
+ (즉, Publsiher이며 Subscriber이죠!)
+
+
+ ### PassthroughSubject
+ */
+
+example(of: "PassthroughSubject", action: {
+    // 1: 사용자 정의 커스텀 Error
+    enum MyError: Error {
+        case test
+    }
+
+    // 2: String과 MyError를 receive 하는 커스텀 Subscriber
+    final class StringSubscriber: Subscriber {
+        typealias Input = String
+
+        typealias Failure = MyError
+
+        func receive(subscription: Subscription) {
+            subscription.request(.max(2))
+        }
+
+        func receive(_ input: String) -> Subscribers.Demand {
+            print("Received value", input)
+            return input == "World" ? .max(1) : .none
+        }
+
+        func receive(completion: Subscribers.Completion<MyError>) {
+            print("Received completion", completion)
+        }
+    }
+
+    // 4: Passthroughsubject 객체  생성
+    let subject = PassthroughSubject<String, MyError>()
+
+//    subject.subscribe(subscriber)
+
+    // 5: sink를 이용하여 subscription1 생성
+    let subscription1 = subject
+        .sink(receiveCompletion: { completion in
+            print("Received completion (sink1)", completion)
+        }, receiveValue: { value in
+            print("Received value (sink1)", value)
+        })
+
+    // 6: sink를 이용하여 subscription2 생성
+    let subscription2 = subject
+        .sink(receiveCompletion: { completion in
+            print("Received completion (2)", completion)
+        }, receiveValue: { value in
+            print("Received value (2)", value)
+        })
+
+    // 7. 값 방출
+    subject.send("Hello")
+    subject.send("World")
+
+    // 8. 구독 취소
+    subscription1.cancel()
+    subscription2.cancel()
+})
+
+/*:
+ `PassthroudhSubject` 를 사용하면 `send(_:)` 를 통해 새로운 값을 방출할수 있습니다.
+ 또한 이는 broadcast 방식으로 진행되므로 해당 subject를 구독하고 있는 모든 subscriber에게 값이 보내지게 됩니다.
+
+ 즉, `subject`는 `subscriber`에게 `element`를 `broadcas` 하는 타입입니다.
+
+ 만일 subject에 completion 이벤트를 전달하거나 subject에 대한 구독이 cancel되면 그 이후에는 값이 전달되지 않습니다.
+
+ 완료 이벤트를 받으면 더이상의 다른 완료 이벤트 혹은 값을 받지 않는것은 당연히 Publisher와 동일합니다.
+
+ */
+
+/*:
+ ### CurrentValueSubject
+ ---
+
+ `PassthorughSubject` 와는 달리 초기값을 가지며 가장 최근에 방출된 value에 대한 buffer를 갖는 subject 입니다.
+
+ Rx에서는 BehaviorSubject에 대응되는 개념입니다.
+
+ 아래 예시를 통해 보다 자세히 살펴보도록 할게요.
+ */
+
+example(of: "CurrentValueSubejct", action: {
+    var subscriptions = Set<AnyCancellable>()
+
+    // 1. Int와 Never 타입을 갖는 CurrentValueSubject 생성
+    let subject = CurrentValueSubject<Int, Never>(0)
+
+    // 2. sink를 통해 subject chain을 구독합니다.
+    subject
+        .sink(receiveCompletion: { _ in
+            print("Received Completion")
+        }, receiveValue: {
+            print("Received value: \($0)")
+        })
+        .store(in: &subscriptions)
+        // 3. sink를 통해 생성한 subscription을 subscriptions Set에 저장합니다.
+
+    subject.send(1)
+    subject.send(2)
+
+    print("CurrentValueSubjct 객체에 담겨있는 값: \(subject.value)")
+
+    // 4. 현재 CurrentValue값 수정
+    subject.value = 999
+
+    print("CurrentValueSubjct 객체에 담겨있는 값: \(subject.value)")
+
+    subject.send(completion: .finished)
+})
+
+/*:
+ PassthourghSubject 예제에서는 `subscription`을 값으로 저장한 이후 취소를 별도로 진행해주었죠.
+
+ ```
+ let subscription1 = passthroughSubject
+    .sink()
+
+ subscription1.cancel()
+ ```
+
+ 이를 CurrentValueSubject 에서는 `store(in:)` 을 통해 처리합니다.
+
+ `in` 에 전달되는 파라미터는 `Set<AnyCancellable>` 타입으로 다양한 Subscription을 저장할수 있습니다.
+
+ 여기에 저장되는 모든 Subscription들은 해당 Set이 deinit 될 때 함께 자동으로 취소가 됩니다.
+
+ */
