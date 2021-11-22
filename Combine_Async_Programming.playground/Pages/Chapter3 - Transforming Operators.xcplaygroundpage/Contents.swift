@@ -242,6 +242,39 @@ empty
  */
 
 /*:
+ ## Incrementally transforming output
+ ---
+
+ `Combine` 에는 `map` 과 같이 upstream으로 부터 받은 값을 조작할 수 있는 연산자가 다양하게 제공됩니다.
+
+ 이번에는 그 중 대표적인 연산자 `scan(_:_:)` 에 대해 알아보도록 할게요.
+
+ ### scan(_:_:)
+
+ 이번 카테고리인 transforming 카테고리의 대표적인 예시인 `scan` 입니다.
+
+ `scan` 연산자는 upstream으로 부터 제공되는 값과 최근 값을 함께 제공해줍니다.
+
+ 이를 통해 operation 과정에서 생긴 값들을 계속해서 publish 할 수 있습니다.
+
+ 예제를 통해 살펴보도록 할게요.
+ */
+
+let publisher = (0...10)
+    .publisher
+    .scan(0, { return $0 + $1 })
+    .sink(receiveValue: { print ("\($0)", terminator: " ") })
+
+// Output: 0 1 3 6 10 15 21 28 36 45 55
+
+/*:
+ RxSwift에서의 scan과 동일한 기능을 제공합니다.
+
+ 0부터 시작하여 10까지 루프를 진행하며 각각의 값들이 방출될 때 마다 최근값과의 덧셈을 한 결과를 방출하는 코드입니다.
+ */
+
+
+/*:
  ## Key Points
  ---
 
