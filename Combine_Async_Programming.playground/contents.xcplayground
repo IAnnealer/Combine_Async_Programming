@@ -4,5 +4,6 @@
         <page name='Chapter1 - Hello, Combine!'/>
         <page name='Chapter2 - Publishers &amp; Subscribers'/>
         <page name='Chapter3 - Transforming Operators'/>
+        <page name='Chapter4 - FIltering Operators'/>
     </pages>
 </playground>
