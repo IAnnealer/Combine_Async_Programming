@@ -5,5 +5,6 @@
         <page name='Chapter2 - Publishers &amp; Subscribers'/>
         <page name='Chapter3 - Transforming Operators'/>
         <page name='Chapter4 - FIltering Operators'/>
+        <page name='Chapter5 - Combining Operators'/>
     </pages>
 </playground>
