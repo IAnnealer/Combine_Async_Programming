@@ -23,8 +23,8 @@ var subscriptions = Set<AnyCancellable>()
 // [3, 4] 값을 갖는 publisher를 생성합니다.
 [3, 4]
     .publisher
-    .prepend(1, 2)
-    .prepend(-1, 0)
+    .prepend(1, 2)  // prepend 연산자를 통해 publisher Chain 제일 앞에 1, 2를 덧붙여줍니다.
+    .prepend(-1, 0) // 위 prepend를 통해 덧붙인 상태에서 제일 앞에 한번더 덧붙입니다.
     .sink(receiveCompletion: { _ in print("\n")},
           receiveValue: { print($0) })
     .store(in: &subscriptions)
@@ -41,7 +41,7 @@ var subscriptions = Set<AnyCancellable>()
 
 [5, 6, 7]
     .publisher
-    .prepend([3, 4])
+    .prepend([3, 4])    // prepend 인자로 Sequence를 준수하는 타입을 전달할수 있습니다.
     .prepend(Set(1...2))
     .sink(receiveCompletion: { _ in print("\n")},
           receiveValue: { print($0) })
@@ -64,7 +64,7 @@ var subscriptions = Set<AnyCancellable>()
 
 [3, 4]
     .publisher
-    .prepend([1, 2].publisher)
+    .prepend([1, 2].publisher)  // Publisher Chain을 prepend 합니다.
     .sink(receiveCompletion: { _ in print("\n") },
           receiveValue: { print($0) })
     .store(in: &subscriptions)
@@ -81,8 +81,8 @@ var subscriptions = Set<AnyCancellable>()
 
 [1, 2, 3]
     .publisher
-    .append([4, 5])         // Array 추가(순서 보장)
-    .append([6, 7])         // Set 추가(순서 미보장)
+    .append([4, 5])         // Array(Ordered) 추가(순서 보장)
+    .append([6, 7])         // Set(UnOrdered) 추가(순서 미보장)
     .sink(receiveCompletion: { _ in print("\n")},
           receiveValue: { print($0) })
     .store(in: &subscriptions)
