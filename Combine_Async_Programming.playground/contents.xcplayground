@@ -6,5 +6,6 @@
         <page name='Chapter3 - Transforming Operators'/>
         <page name='Chapter4 - FIltering Operators'/>
         <page name='Chapter5 - Combining Operators'/>
+        <page name='Chapter6 - Time Manipulation Operators'/>
     </pages>
 </playground>
