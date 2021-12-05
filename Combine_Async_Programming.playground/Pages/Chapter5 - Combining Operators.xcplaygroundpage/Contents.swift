@@ -302,3 +302,47 @@ zipSecondSubject.send(completion: .finished)
      P1: 3, P2: 6
      Completed
  */
+
+let p1 = PassthroughSubject<Int, Never>()
+let p2 = PassthroughSubject<Int, Never>()
+let p3 = PassthroughSubject<Int, Never>()
+
+let ps = PassthroughSubject<PassthroughSubject<Int, Never>, Never>()
+
+ps
+    .switchToLatest()
+    .sink(receiveCompletion: { _ in print("switchToLatest completed") },
+          receiveValue: { print($0) })
+    .store(in: &subscriptions)
+
+ps.send(p1)
+p1.send(1)
+p1.send(2)
+
+ps.send(p2)
+p2.send(3)
+p2.send(4)
+
+ps.send(p3)
+p3.send(5)
+p3.send(6)
+p3.send(7)
+p3.send(8)
+
+p3.send(completion: .finished)
+
+
+//guard let url = URL(string: "https://mysite.com/mydata.json") else { }
+let testURL = URL(string: "https://mysite.com/mydata.json")!
+
+let subscription = URLSession.shared
+    .dataTaskPublisher(for: testURL)
+    .sink(receiveCompletion: { completion in
+        if case .failure(let err) = completion {
+            print("Retrieving data failed with error: \(err)")
+        }
+    }, receiveValue: { data, response in
+        print("Retrieved data of size \(data.count), response: \(response)")
+    })
+    .store(in: &subscriptions)
+
